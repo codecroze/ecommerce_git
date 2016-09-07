@@ -1,7 +1,7 @@
 //for using express it has all the methods like get ,post, put, delete
 var express = require('express');
 
-//to show the req by the uer in server
+//to show the req by the user in server
 var morgan = require('morgan');
 
 //app is referring to express objects
