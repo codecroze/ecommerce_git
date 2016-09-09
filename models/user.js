@@ -6,7 +6,7 @@ var Schema = mongoose.Schema;
 //The user schema attributes / char./ fileds
 var UserSchema = new mongoose.Schema({
 	email: {type: String, unique: true, lowercase: true},
-	password: : String,
+	password:String,
 
 	profile:{
 		name: {type: String, default: ''},
@@ -26,14 +26,11 @@ var UserSchema = new mongoose.Schema({
 user.email = ""
 user.profile.name*/
 
-
-
-
 //Hash the password before we save in DB
 //pre save it before adding it to DB
 //this refres to UserSchema
 //Salt is random data created b genSalt
-UserSchema.pre('save', functon(next){
+UserSchema.pre('save', function(next){
 	var user = this;
 	if(!user.isModified('password')) return next();
 	bcrypt.genSalt(10, function(err, salt){
@@ -54,3 +51,6 @@ UserSchema.pre('save', functon(next){
 UserSchema.methods.comparePassword = function(password){
 	return bcrypt.compareSync(password, this.password);
 }
+
+//to export thr whole Schema so that other files can use it
+module.exports = mongoose.model('User', UserSchema);
