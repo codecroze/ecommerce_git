@@ -15,6 +15,14 @@ var ejs = require('ejs');
 //to create flexible web pages
 var engine = require('ejs-mate');
 
+//express uses cookie to store session id
+var session = require('express-session');
+
+//parses cookie and puts cookie info in middleware
+var cookieParser = require('cookie-parser');
+
+var flash = require('express-flash');
+
 //to access user.js file in models directory
 var User = require('./models/user');
 
@@ -43,6 +51,16 @@ app.use(bodyParser.json());
 
 //express can parse the data format called x-www-form format
 app.use(bodyParser.urlencoded({extended:true}));
+
+app.use(cookieParser());
+
+app.use(session({
+	resave:true,
+	saveUninitialized: true,
+	secret: "shaalini"
+}));
+
+app.use(flash());
 
 //to use ejs-mate engine
 app.engine('ejs', engine);

@@ -1,9 +1,13 @@
+//the functionality includes in login page ,it retrieves data from login page,data of user
 var router = require('express').Router();
 
 var User = require('../models/user');
 
 router.get('/signup', function(req,res,next){
-	res.render('accounts/signup');
+	res.render('accounts/signup',{
+		//error object
+		errors: req.flash('errors')
+	});
 });
 
 router.post('/signup', function(req,res,next){
@@ -18,13 +22,15 @@ router.post('/signup', function(req,res,next){
     //mongoose method to find only one doc
 	User.findOne({email: req.body.email}, function(err,existingUser){
 		if(existingUser){
-			console.log(req.body.email + "Alresdy here");
+			//if email is duplicated it will run and redirect to /signup
+			//method in server.js
+			req.flash('errors', 'Account exists');
 			return res.redirect('/signup');
 		}else{
 			user.save(function(err,user){
 				if(err) return next(err);
 
-				res.json("New user creted");
+				return res.redirect('/');
 			});
 		}
 	});
