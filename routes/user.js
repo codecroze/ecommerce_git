@@ -2,6 +2,10 @@ var router = require('express').Router();
 
 var User = require('../models/user');
 
+router.get('/signup', function(req,res,next){
+	res.render('accounts/signup');
+});
+
 router.post('/signup', function(req,res,next){
 	//to create an instance of user object taken from user.js file in models directory
 	var user = new User();
