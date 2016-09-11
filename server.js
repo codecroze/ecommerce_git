@@ -23,6 +23,14 @@ var cookieParser = require('cookie-parser');
 
 var flash = require('express-flash');
 
+//to store session n mongodb 
+var MongoStore = require('connect-mongo')(session);
+
+var passport = require('passport');
+
+//to access data from secret file in config folder
+var secret = require('./config/secret');
+
 //to access user.js file in models directory
 var User = require('./models/user');
 
@@ -30,8 +38,8 @@ var User = require('./models/user');
 var app = express();
 
 
-
-mongoose.connect('mongodb://root:abc123@ds029106.mlab.com:29106/ecommerce', function(err){
+//secret.database is in sacret.js file in config folder
+mongoose.connect(secret.database, function(err){
 	if(err) {
 		console.log(err);
 	}else{
@@ -57,7 +65,8 @@ app.use(cookieParser());
 app.use(session({
 	resave:true,
 	saveUninitialized: true,
-	secret: "shaalini"
+	secret: secret.secretKey,
+	store: new MongoStore({url:secret.database,autoReconnect:true})
 }));
 
 app.use(flash());
@@ -76,8 +85,7 @@ var userRoutes = require('./routes/user');
 app.use(mainRoutes);
 app.use(userRoutes);
 
-
-app.listen(3000, function(err){
+app.listen(secret.port, function(err){
 	if(err) throw err;
 	console.log("Server is running");
 });
