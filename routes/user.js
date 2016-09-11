@@ -3,6 +3,34 @@ var router = require('express').Router();
 
 var User = require('../models/user');
 
+var passport = require('passport');
+
+var passportConf = require('../config/passport');
+
+//get the data if user logins 
+router.get('/login',function(req,res){
+	if(req.user) return res.redirect('/');
+	res.render('accounts/login',{message:req.flash('loginMessage')});
+});
+
+//whenver user success logins redirect it to profile
+router.post('/login', passport.authenticate('local-login',{
+	successRedirect: '/profile',
+	failureRedirect: '/login',
+	failureFlash: true
+
+}));
+
+//it gets json data from mongoDB in postman
+//got to db and check userid exists or nor, if exists then render it with user object
+router.get('/profile',function(req,res,next){
+	User.findOne({_id: req.user._id}, function(err,user){
+		if(err) return next(err);
+		res.render('accounts/profile', {user: user}); //this can be used to manipulate ejs file
+	});
+
+});
+
 router.get('/signup', function(req,res,next){
 	res.render('accounts/signup',{
 		//error object

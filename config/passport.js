@@ -1,7 +1,9 @@
 
 var passport = require('passport');
 
-var LocalStrategy = require('passport-local').Strategy();
+var LocalStrategy = require('passport-local').Strategy;
+
+var User = require('../models/user');
 
 //serialize and deserialize
 //serialize is the process of translating DS 
@@ -22,18 +24,18 @@ passport.deserializeUser(function(id,done){
 passport.use('local-login', new LocalStrategy({
 	usernameField: 'email',
 	passwordField: 'password',
-	passReqToCallBack: true
+	passReqToCallback: true
 }, function(req,email,password,done){ //to check if email matches
 	User.findOne({email: email}, function(err,user){
 		if (err) return done(err);
 
 		if(!user){
-			return done(null,false, req.flash('login message', 'no user found'));
+			return done(null,false, req.flash('loginMessage', 'no user found'));
 
 		}
 
 		if(!user.comparePassword(password)){ //to check the password
-			return done(null,false,req.flash('login message', 'oops wrong'));
+			return done(null,false,req.flash('loginMessage', 'oops wrong'));
 
 		}
 		return done(null,user);

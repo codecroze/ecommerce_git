@@ -25,7 +25,7 @@ var cookieParser = require('cookie-parser');
 var flash = require('express-flash');
 
 //to store session in mongodb on server side
-var MongoStore = require('connect-mongo')(session);
+var MongoStore = require('connect-mongo/es5')(session);
 
 var passport = require('passport');
 
@@ -71,6 +71,12 @@ app.use(session({
 }));
 
 app.use(flash());
+
+//to teach to use passport
+app.use(passport.initialize());
+
+//it collects the sessionid
+app.use(passport.session());
 
 //to use ejs-mate engine
 app.engine('ejs', engine);
