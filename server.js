@@ -78,6 +78,13 @@ app.use(passport.initialize());
 //it collects the sessionid
 app.use(passport.session());
 
+//evry roits will have this user objects
+app.use(function(req,res,next){
+	//every routes will have user object by default
+	res.locals.user = req.user;
+	next();
+});
+
 //to use ejs-mate engine
 app.engine('ejs', engine);
 
