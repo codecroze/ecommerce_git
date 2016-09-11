@@ -19,11 +19,12 @@ var engine = require('ejs-mate');
 var session = require('express-session');
 
 //parses cookie and puts cookie info in middleware
+//it will take the session data encrypt it and pass to browser
 var cookieParser = require('cookie-parser');
 
 var flash = require('express-flash');
 
-//to store session n mongodb 
+//to store session in mongodb on server side
 var MongoStore = require('connect-mongo')(session);
 
 var passport = require('passport');
