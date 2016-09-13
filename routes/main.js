@@ -8,4 +8,7 @@ router.get('/about', function(req,res){
 	res.render('main/about');
 });
 
+router.get('/home', function(req,res){
+	res.render('main/home');
+});
 module.exports = router;
