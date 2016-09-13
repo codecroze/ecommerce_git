@@ -1,6 +1,7 @@
 //it is in models folder which will store all the schemas like user schema
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
+var crypto = require('crypto');
 var Schema = mongoose.Schema;
 
 //The user schema attributes / char./ fileds
@@ -52,5 +53,12 @@ UserSchema.methods.comparePassword = function(password){
 	return bcrypt.compareSync(password, this.password);
 }
 
+//for users profile pic
+UserSchema.methods.gravatar = function(size){
+	if(!this.size) size = 200; //if no size specified make 200 default
+	if(!this.email) return 'https://gravatar.com/avatar/?s' + size + '&d=retro';
+	var md5 = crypto.createHash('md5').update(this.email).digest('hex');//for unique pic
+    return 'https://gravatar.com/avatar/' + md5 +'?s=' + size + '&d=retro';
+}
 //to export thr whole Schema so that other files can use it
 module.exports = mongoose.model('User', UserSchema);

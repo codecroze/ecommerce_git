@@ -46,6 +46,7 @@ router.post('/signup', function(req,res,next){
 	user.profile.name = req.body.name; //user.profile.name is taken from user.js
 	user.password = req.body.password;
 	user.email = req.body.email;
+	user.profile.picture = user.gravatar();
     
     //mongoose method to find only one doc
 	User.findOne({email: req.body.email}, function(err,existingUser){
@@ -57,8 +58,11 @@ router.post('/signup', function(req,res,next){
 		}else{
 			user.save(function(err,user){
 				if(err) return next(err);
-
-				return res.redirect('/');
+                //it is adding the session to server and cookie to browser
+				req.logIn(user, function(err){
+					if(err) return next(err);
+					res.redirect('/profile');
+				})
 			});
 		}
 	});
