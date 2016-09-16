@@ -11,4 +11,11 @@ router.get('/about', function(req,res){
 router.get('/home', function(req,res){
 	res.render('main/home');
 });
+
+router.get('/users', function(req,res){
+	User.find({}, function(err,users){
+		res.json(users);
+	})
+})
+
 module.exports = router;

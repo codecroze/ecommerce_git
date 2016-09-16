@@ -35,6 +35,8 @@ var secret = require('./config/secret');
 //to access user.js file in models directory
 var User = require('./models/user');
 
+var Category = require('./models/category');
+
 //app is referring to express objects
 var app = express();
 
@@ -85,6 +87,17 @@ app.use(function(req,res,next){
 	next();
 });
 
+//
+app.use(function(req,res,next){
+	//for finding all categories ,{}- if no query then search every single doc in DB 
+	Category.find({}, function(err, categories){
+		if (err) return next(err);
+		// store the list of categories in locan var categories
+		res.locals.categories = categories; //var is used in navbar.ejs file
+		next();
+	});
+});
+
 //to use ejs-mate engine
 app.engine('ejs', engine);
 
@@ -96,8 +109,12 @@ var mainRoutes=require('./routes/main');
 
 var userRoutes = require('./routes/user');
 
+var adminRoutes = require('./routes/admin');
+
 app.use(mainRoutes);
 app.use(userRoutes);
+app.use(adminRoutes);
+
 
 app.listen(secret.port, function(err){
 	if(err) throw err;

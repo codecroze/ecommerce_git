@@ -9,7 +9,7 @@ router.get('/add-category', function(req,res,next){
 });
 
 //it relies on cat schema
-router.post('/add-category'. function(req,res,next){
+router.post('/add-category',function(req,res,next){
 	var category = new Category();
 	category.name = req.body.name; //save data in name field
     
@@ -17,6 +17,8 @@ router.post('/add-category'. function(req,res,next){
 	category.save(function(err){
 		if(err) return next(err);
 		req.flash('success', 'Successfully added a category');
-		return res.rediretc('/add-category');
+		return res.redirect('/add-category');
 	});
 });
+
+module.exports = router;
